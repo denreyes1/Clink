@@ -17,9 +17,7 @@ fun AppNavigation() {
             DrinksScreen(
                 onDrinkClicked =
                 {
-//                    navHostController.navigate(
-//                        "${Screens.PetDetailsScreen.route}/${Json.encodeToString(cat)}"
-//                    )
+                    //TODO: Navigate to Drink Details Screen
                 }
             )
         }
