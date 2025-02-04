@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.denreyes.clink.views.DrinkDetailsScreen
 import com.denreyes.clink.views.DrinksScreen
 
 @Composable
@@ -17,7 +18,14 @@ fun AppNavigation() {
             DrinksScreen(
                 onDrinkClicked =
                 {
-                    //TODO: Navigate to Drink Details Screen
+                    navController.navigate(Screens.DrinkDetailsScreen.route)
+                }
+            )
+        }
+        composable(Screens.DrinkDetailsScreen.route) {
+            DrinkDetailsScreen(
+                onBackPressed = {
+                    navController.popBackStack()
                 }
             )
         }

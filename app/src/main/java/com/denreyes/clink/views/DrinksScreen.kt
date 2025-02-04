@@ -11,10 +11,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.denreyes.clink.data.Drink
+import com.denreyes.clink.viewmodel.DrinksViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrinksScreen(onDrinkClicked: (Drink) -> Unit) {
+fun DrinksScreen(
+    onDrinkClicked: (Drink) -> Unit
+) {
+    val drinksViewModel: DrinksViewModel = koinViewModel()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -32,7 +38,8 @@ fun DrinksScreen(onDrinkClicked: (Drink) -> Unit) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                onDrinkClicked = onDrinkClicked
+                onDrinkClicked = onDrinkClicked,
+                drinks = drinksViewModel.getDrinks()
             )
         }
     )
