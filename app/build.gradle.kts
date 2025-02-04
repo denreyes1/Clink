@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlinx-serialization")
 }
 
 android {
@@ -72,4 +73,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coil)
+    implementation(libs.bundles.networking)
 }

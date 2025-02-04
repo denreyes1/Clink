@@ -1,5 +1,6 @@
 package com.denreyes.clink.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -26,10 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.denreyes.clink.data.Drink
+import com.denreyes.clink.viewmodel.DrinksViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrinkDetailsScreen(onBackPressed: () -> Unit) {
+fun DrinkDetailsScreen(onBackPressed: () -> Unit, drinkId: String) {
+    val drinksViewModel: DrinksViewModel = koinViewModel()
+    val drink = drinksViewModel.getDrinkById(drinkId)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,7 +62,8 @@ fun DrinkDetailsScreen(onBackPressed: () -> Unit) {
         content = { paddingValues ->
             DrinkDetailsScreenContent(
                 modifier = Modifier
-                    .padding(paddingValues)
+                    .padding(paddingValues),
+                drink = drink!!
             )
         }
     )
@@ -64,7 +71,10 @@ fun DrinkDetailsScreen(onBackPressed: () -> Unit) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DrinkDetailsScreenContent(modifier: Modifier) {
+fun DrinkDetailsScreenContent(
+    modifier: Modifier,
+    drink: Drink
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -73,11 +83,11 @@ fun DrinkDetailsScreenContent(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
-            model = "https://www.thecocktaildb.com/images/media/drink/urpsyq1475667335.jpg",
-            contentDescription = "Cocktail Image",
+            model = drink.strDrinkThumb,
+            contentDescription = "${drink.strDrink} Image",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(450.dp),
             contentScale = ContentScale.FillWidth
         )
         Row(
@@ -87,9 +97,9 @@ fun DrinkDetailsScreenContent(modifier: Modifier) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(text = "Name: Drink Name")
-                Text(text = "Category: Drink Category")
-                Text(text = "Instructions: Drink Instructions")
+                Text(text = "Name: ${drink.strDrink}")
+                Text(text = "Category: ${drink.strCategory}")
+                Text(text = "Instructions: ${drink.strInstructions}")
             }
         }
     }
