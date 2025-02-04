@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import com.denreyes.clink.data.DrinksRepository
 import com.denreyes.clink.data.DrinksRepositoryImpl
 
-class DrinksViewModel: ViewModel() {
-    private val drinksRepository: DrinksRepository = DrinksRepositoryImpl()
+class DrinksViewModel(
+    private val drinksRepository: DrinksRepository
+): ViewModel() {
+
     fun getDrinks() = drinksRepository.getDrinks()
 }
