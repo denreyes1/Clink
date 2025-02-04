@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.denreyes.clink.viewmodel.DrinksViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.denreyes.clink.data.Drink
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DrinkList(modifier: Modifier) {
+fun DrinkList(modifier: Modifier, onDrinkClicked: (Drink) -> Unit) {
     val drinksViewModel: DrinksViewModel = koinViewModel()
     LazyColumn(
         modifier = modifier
