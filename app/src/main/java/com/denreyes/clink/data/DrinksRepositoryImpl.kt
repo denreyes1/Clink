@@ -12,20 +12,41 @@ class DrinksRepositoryImpl(
     override suspend fun getDrinks(): NetworkResult<List<Drink>> {
         return withContext(dispatcher) {
             try {
-                val response = drinksAPI.fetchDrinkByCategory("Cocktail")
+                val response = drinksAPI.fetchDrinksByCategory("Cocktail")
                 if (response.isSuccessful) {
                     response.body()?.let { drinkResponse ->
                         NetworkResult.Success(drinkResponse.drinks)
                     } ?: NetworkResult.Error("Response body is null")
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Unknown API error"
-                    Log.e("Clink/Error Network", "API Error: $errorMessage")
+                    Log.e("Clink/Error Network/getDrinks", "API Error: $errorMessage")
                     NetworkResult.Error(errorMessage)
                 }
             } catch (e: Exception) {
-                Log.e("Clink/Error Network", "Exception: ${e.message}", e)
+                Log.e("Clink/Error Network/getDrinks", "Exception: ${e.message}", e)
                 NetworkResult.Error(e.message ?: "Unknown error")
             }
         }
     }
+
+    override suspend fun fetchDrinkById(id: String): NetworkResult<Drink> {
+        return withContext(dispatcher) {
+            try {
+                val response = drinksAPI.fetchDrinkById(id)
+                if (response.isSuccessful) {
+                    response.body()?.drinks?.firstOrNull()?.let { drink ->
+                        NetworkResult.Success(drink)
+                    } ?: NetworkResult.Error("Drink not found")
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown API error"
+                    Log.e("Clink/Error Network/fetchDrinkById", "API Error: $errorMessage")
+                    NetworkResult.Error(errorMessage)
+                }
+            } catch (e: Exception) {
+                Log.e("Clink/Error Network/fetchDrinkById", "Exception: ${e.message}", e)
+                NetworkResult.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
 }

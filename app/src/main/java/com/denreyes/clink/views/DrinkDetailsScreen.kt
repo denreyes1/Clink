@@ -22,6 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,40 +36,59 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrinkDetailsScreen(onBackPressed: () -> Unit, drinkId: String) {
+fun DrinkDetailsScreen(
+    onBackPressed: () -> Unit,
+    drinkId: String
+) {
     val drinksViewModel: DrinksViewModel = koinViewModel()
-    val drink = drinksViewModel.getDrinkById(drinkId)
+    val drink by drinksViewModel.selectedDrinkState.collectAsState()
+
+    // Fetch drink on screen load
+    LaunchedEffect(drinkId) {
+        drinksViewModel.getDrinkById(drinkId)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = "Drink Details")
-                },
+                title = { Text(text = "Drink Details") },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.
-                    primary,
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ),
                 navigationIcon = {
-                    IconButton(
-                        onClick = onBackPressed,
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                    )
+                    IconButton(onClick = onBackPressed) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
                 }
             )
         },
         content = { paddingValues ->
-            DrinkDetailsScreenContent(
-                modifier = Modifier
-                    .padding(paddingValues),
-                drink = drink!!
-            )
+            if (drink != null) {
+                DrinkDetailsScreenContent(
+                    modifier = Modifier.padding(paddingValues),
+                    drink = drink!!
+                )
+            } else {
+                LoadingOrErrorState()
+            }
         }
     )
+}
+
+@Composable
+fun LoadingOrErrorState() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Loading drink details...", style = MaterialTheme.typography.bodyLarge)
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -98,6 +120,8 @@ fun DrinkDetailsScreenContent(
         ) {
             Column {
                 Text(text = "Name: ${drink.strDrink}")
+                Text(text = "Category: ${drink.strCategory}")
+                Text(text = "Instructions: ${drink.strInstructions}")
             }
         }
     }

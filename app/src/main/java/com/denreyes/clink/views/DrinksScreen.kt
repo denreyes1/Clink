@@ -45,11 +45,7 @@ fun DrinksScreen(
         AnimatedVisibility(
             visible = drinksUIState.drinks.isNotEmpty()
         ) {
-            LazyColumn {
-                items(drinksUIState.drinks) { drink ->
-                    DrinkListItem(drink = drink, {})
-                }
-            }
+            DrinkList(onDrinkClicked = onDrinkClicked, drinks = drinksUIState.drinks, modifier = Modifier)
         }
         AnimatedVisibility(
             visible = drinksUIState.error != null
