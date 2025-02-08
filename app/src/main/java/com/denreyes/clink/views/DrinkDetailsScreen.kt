@@ -98,8 +98,6 @@ fun DrinkDetailsScreenContent(
         ) {
             Column {
                 Text(text = "Name: ${drink.strDrink}")
-                Text(text = "Category: ${drink.strCategory}")
-                Text(text = "Instructions: ${drink.strInstructions}")
             }
         }
     }

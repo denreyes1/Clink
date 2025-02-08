@@ -1,5 +1,5 @@
 package com.denreyes.clink.data
 
 interface DrinksRepository {
-    fun getDrinks(): List<Drink>
+    suspend fun getDrinks(): NetworkResult<List<Drink>>
 }
