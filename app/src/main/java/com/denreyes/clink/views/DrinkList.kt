@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.denreyes.clink.R
 import com.denreyes.clink.data.Drink
@@ -51,6 +53,8 @@ import com.denreyes.clink.data.getFakeDrink
 import com.denreyes.clink.ui.theme.GrafittiText
 import com.denreyes.clink.ui.theme.avenirFontFamily
 import com.denreyes.clink.ui.theme.cruelMachineFontFamily
+import com.denreyes.clink.viewmodel.DrinksViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DrinkList(
@@ -70,12 +74,14 @@ fun DrinkList(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DrinkListItem(
     drink: Drink,
     onDrinkClicked: (Drink) -> Unit
 ) {
+    val drinksViewModel: DrinksViewModel = koinViewModel()
+    val selectedCategory by drinksViewModel.selectedCategory.collectAsStateWithLifecycle()
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,7 +127,7 @@ fun DrinkListItem(
 
                     // Category
                     Text(
-                        text = "Cocktail",
+                        text = selectedCategory,
                         fontFamily = avenirFontFamily,
                         color = Color.White,
                         fontSize = 16.sp,

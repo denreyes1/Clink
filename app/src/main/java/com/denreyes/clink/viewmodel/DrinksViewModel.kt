@@ -18,15 +18,16 @@ class DrinksViewModel(
 ) : ViewModel() {
     val drinkUIState = MutableStateFlow(DrinksUIState())
     val selectedDrinkState = MutableStateFlow<Drink?>(null)
+    val selectedCategory = MutableStateFlow("Gin")
 
     init {
-        getDrinks()
+        getDrinks(selectedCategory.value)
     }
 
-    private fun getDrinks() {
+    private fun getDrinks(category: String) {
         drinkUIState.value = DrinksUIState(isLoading = true)
         viewModelScope.launch {
-            when (val result = drinksRepository.getDrinksByIngredient("Amaretto")) {
+            when (val result = drinksRepository.getDrinksByIngredient(category)) {
                 is NetworkResult.Success -> {
                     drinkUIState.update {
                         it.copy(isLoading = false, drinks = result.data)
@@ -41,6 +42,12 @@ class DrinksViewModel(
             }
         }
     }
+
+    fun setCategory(category: String) {
+        selectedCategory.value = category
+        getDrinks(category) // Fetch new drinks when category changes
+    }
+
 
     fun getDrinkById(drinkId: String) {
         selectedDrinkState.value = null  // Reset state before fetching new drink

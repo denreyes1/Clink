@@ -55,8 +55,8 @@ fun DrinksScreen(
     val drinksViewModel: DrinksViewModel = koinViewModel()
     val drinksUIState by drinksViewModel.drinkUIState.collectAsStateWithLifecycle()
 
-    val categories = listOf("Gin", "Vodka", "Tequila", "Rum", "Whiskey")
-    var selectedCategory by remember { mutableStateOf("Gin") } // Default selection
+    val categories = listOf("Gin", "Vodka", "Tequila", "Rum", "Whiskey", "Beer", "Red Wine", "White Wine")
+    val selectedCategory by drinksViewModel.selectedCategory.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -104,7 +104,7 @@ fun DrinksScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .padding(horizontal = 24.dp)
-                            .clickable { selectedCategory = category }
+                            .clickable { drinksViewModel.setCategory(category) }
                     ) {
                         Text(
                             text = category,

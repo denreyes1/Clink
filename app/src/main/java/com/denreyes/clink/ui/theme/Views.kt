@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import java.time.format.TextStyle
 import kotlin.random.Random
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun GrafittiText(
     text: String,
@@ -38,14 +37,13 @@ fun GrafittiText(
     val randomRotation = remember { (Random.nextFloat() * 40f) - 20f }
     val processedText = text
         .uppercase()
-        .replace(".", "")
-        .replace(",", "")
+        .replace(Regex("[.,&-]"), "") // Remove unwanted characters in one step
         .removePrefix("A ")
         .removePrefix("THE ")
         .split(" ")
         .firstOrNull()
+        ?.take(3)
         .orEmpty()
-        .take(3)
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val availableWidth = constraints.maxWidth.toFloat()
