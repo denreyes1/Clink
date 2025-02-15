@@ -26,7 +26,7 @@ class DrinksViewModel(
     private fun getDrinks() {
         drinkUIState.value = DrinksUIState(isLoading = true)
         viewModelScope.launch {
-            when (val result = drinksRepository.getDrinks()) {
+            when (val result = drinksRepository.getDrinksByIngredient("Amaretto")) {
                 is NetworkResult.Success -> {
                     drinkUIState.update {
                         it.copy(isLoading = false, drinks = result.data)

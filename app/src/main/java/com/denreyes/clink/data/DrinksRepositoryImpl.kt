@@ -9,10 +9,30 @@ class DrinksRepositoryImpl(
     private val dispatcher: CoroutineDispatcher
 ) : DrinksRepository {
 
-    override suspend fun getDrinks(): NetworkResult<List<Drink>> {
+    override suspend fun getDrinksByCategory(category: String): NetworkResult<List<Drink>> {
         return withContext(dispatcher) {
             try {
-                val response = drinksAPI.fetchDrinksByCategory("Cocktail")
+                val response = drinksAPI.fetchDrinksByCategory(category)
+                if (response.isSuccessful) {
+                    response.body()?.let { drinkResponse ->
+                        NetworkResult.Success(drinkResponse.drinks)
+                    } ?: NetworkResult.Error("Response body is null")
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown API error"
+                    Log.e("Clink/Error Network/getDrinks", "API Error: $errorMessage")
+                    NetworkResult.Error(errorMessage)
+                }
+            } catch (e: Exception) {
+                Log.e("Clink/Error Network/getDrinks", "Exception: ${e.message}", e)
+                NetworkResult.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    override suspend fun getDrinksByIngredient(ingredient: String): NetworkResult<List<Drink>> {
+        return withContext(dispatcher) {
+            try {
+                val response = drinksAPI.fetchDrinksByIngredient(ingredient)
                 if (response.isSuccessful) {
                     response.body()?.let { drinkResponse ->
                         NetworkResult.Success(drinkResponse.drinks)
@@ -48,5 +68,4 @@ class DrinksRepositoryImpl(
             }
         }
     }
-
 }

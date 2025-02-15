@@ -11,6 +11,11 @@ interface DrinksAPI {
         @Query("c") category: String,
     ): Response<DrinkResponse>
 
+    @GET("filter.php")
+    suspend fun fetchDrinksByIngredient(
+        @Query("i") ingredient: String,
+    ): Response<DrinkResponse>
+
 
     @GET("lookup.php")
     suspend fun fetchDrinkById(
