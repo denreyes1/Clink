@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -101,29 +102,28 @@ fun DrinkListItem(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 24.dp)
                 ) {
                     // Name
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .background(Color.Black)
+                            .background(Color.Black.copy(alpha = 0.5f))
                     ) {
                         Text(
                             text = drink.strDrink,
-                            fontSize = 24.sp,
+                            fontSize = 32.sp,
                             color = Color.White,
                             fontFamily = avenirFontFamily,
                             fontWeight = FontWeight.Bold,
+                            lineHeight = 32.sp,
                         )
                     }
-
 
                     // Category
                     Text(
                         text = "Cocktail",
                         fontFamily = avenirFontFamily,
-                        color = Color.Black,
+                        color = Color.White,
                         fontSize = 16.sp,
                     )
 
@@ -139,13 +139,15 @@ fun DrinkListItem(
                         Text(
                             text = "Make",
                             fontSize = 14.sp,
+                            color = Color.White,
                             fontFamily = avenirFontFamily,
                             fontWeight = FontWeight.Bold,
                         )
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = "Make",
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
+                            tint = Color.White
                         )
                     }
                 }
@@ -161,8 +163,8 @@ fun DrinkListItem(
 //                            .fillMaxWidth()
                             .height(190.dp)
                             .width(150.dp)
-                            .background(Color.Black)
-                            .border(5.dp, Color.Black) // Gray border with rounded corners
+                            .background(Color.White)
+                            .border(5.dp, Color.White) // Gray border with rounded corners
                             .align(Alignment.CenterEnd)
                     ) {
                         AsyncImage(
@@ -193,8 +195,8 @@ fun DrinkListItem(
 
             // Divider with 1-inch (approx. 24dp) margin on both sides
             Divider(
-                color = Color.Black,
-                thickness = 1.dp,
+                color = Color.White,
+                thickness = 0.8.dp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp)
