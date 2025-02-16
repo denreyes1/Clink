@@ -1,6 +1,9 @@
 package com.denreyes.clink.views
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +40,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -131,20 +135,37 @@ fun DrinksScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AnimatedVisibility(
-                    visible = drinksUIState.isLoading
-                ) {
-                    CircularProgressIndicator()
-                }
-                AnimatedVisibility(
-                    visible = drinksUIState.drinks.isNotEmpty()
-                ) {
-                    DrinkList(onDrinkClicked = onDrinkClicked, drinks = drinksUIState.drinks, modifier = Modifier)
-                }
-                AnimatedVisibility(
-                    visible = drinksUIState.error != null
-                ) {
-                    Text(text = drinksUIState.error ?: "")
+                key(selectedCategory) {
+                    AnimatedVisibility(
+                        visible = drinksUIState.isLoading,
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                    AnimatedVisibility(
+                        visible = drinksUIState.drinks.isNotEmpty(),
+                        enter = fadeIn(animationSpec = tween(durationMillis = 2000))
+                    ) {
+                        DrinkList(
+                            onDrinkClicked = onDrinkClicked,
+                            drinks = drinksUIState.drinks,
+                            modifier = Modifier
+                        )
+                    }
+                    AnimatedVisibility(
+                        visible = drinksUIState.error != null,
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = drinksUIState.error ?: "")
+                        }
+                    }
                 }
             }
         }
